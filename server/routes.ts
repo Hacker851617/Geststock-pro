@@ -96,6 +96,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Export movements to CSV
+  app.get("/api/export/movements-csv", async (req, res) => {
+    try {
+      const movements = await storage.getStockMovements();
+      const products = await storage.getProducts();
+      
+      const getProductName = (productId: string) => {
+        const product = products.find(p => p.id === productId);
+        return product?.name || "Produit supprimé";
+      };
+
+      const formatPrice = (price: number | null) => {
+        if (!price) return "0.00";
+        return (price / 100).toFixed(2);
+      };
+      
+      const csvHeaders = "Date,Heure,Type,Produit,Quantité,Prix Unitaire,Prix Total,Référence,Motif\n";
+      const csvRows = movements.map(m => {
+        const date = new Date(m.timestamp!);
+        return `"${date.toLocaleDateString('fr-FR')}","${date.toLocaleTimeString('fr-FR')}","${m.type}","${getProductName(m.productId)}",${m.quantity},"${formatPrice(m.unitPrice)}","${formatPrice(m.totalPrice)}","${m.reference || ''}","${m.reason || ''}"`;
+      }).join("\n");
+      
+      const csv = csvHeaders + csvRows;
+      
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="mouvements_stock.csv"');
+      res.send(csv);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to export movements CSV" });
+    }
+  });
+
   // Get dashboard stats
   app.get("/api/stats", async (req, res) => {
     try {

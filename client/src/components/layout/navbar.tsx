@@ -1,6 +1,19 @@
 import { Package } from "lucide-react";
+import { Link, useLocation } from "wouter";
 
 export function Navbar() {
+  const [location] = useLocation();
+
+  const isActive = (path: string) => {
+    return location === path;
+  };
+
+  const getLinkClass = (path: string) => {
+    return isActive(path)
+      ? "text-blue-600 border-b-2 border-blue-600 px-1 pt-1 pb-4 text-sm font-medium"
+      : "text-slate-500 hover:text-slate-700 px-1 pt-1 pb-4 text-sm font-medium";
+  };
+
   return (
     <nav className="bg-white shadow-sm border-b border-slate-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -11,18 +24,15 @@ export function Navbar() {
               <h1 className="text-xl font-bold text-slate-900">GestStock Pro</h1>
             </div>
             <div className="hidden md:ml-10 md:flex md:space-x-8">
-              <a href="#" className="text-blue-600 border-b-2 border-blue-600 px-1 pt-1 pb-4 text-sm font-medium">
+              <Link href="/" className={getLinkClass("/")}>
                 Tableau de bord
-              </a>
-              <a href="#" className="text-slate-500 hover:text-slate-700 px-1 pt-1 pb-4 text-sm font-medium">
-                Produits
-              </a>
-              <a href="#" className="text-slate-500 hover:text-slate-700 px-1 pt-1 pb-4 text-sm font-medium">
-                Rapports
-              </a>
-              <a href="#" className="text-slate-500 hover:text-slate-700 px-1 pt-1 pb-4 text-sm font-medium">
-                Paramètres
-              </a>
+              </Link>
+              <Link href="/movements" className={getLinkClass("/movements")}>
+                Mouvements
+              </Link>
+              <Link href="/reports" className={getLinkClass("/reports")}>
+                Rapports & Alertes
+              </Link>
             </div>
           </div>
           <div className="flex items-center space-x-4">

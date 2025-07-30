@@ -143,6 +143,9 @@ export class MemStorage implements IStorage {
       id,
       timestamp: new Date(),
       reason: insertMovement.reason || null,
+      unitPrice: insertMovement.unitPrice || null,
+      totalPrice: insertMovement.totalPrice || null,
+      reference: insertMovement.reference || null,
     };
     this.stockMovements.set(id, movement);
     await this.saveMovements();
