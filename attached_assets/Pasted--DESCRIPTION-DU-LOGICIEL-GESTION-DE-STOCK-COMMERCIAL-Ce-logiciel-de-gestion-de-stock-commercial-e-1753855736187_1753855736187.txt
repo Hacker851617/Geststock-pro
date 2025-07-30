@@ -1,0 +1,51 @@
+📦 DESCRIPTION DU LOGICIEL: GESTION DE STOCK COMMERCIAL
+Ce logiciel de gestion de stock commercial est un outil simple, intuitif et efficace conçu pour les petites entreprises, les commerçants, les gérants de dépôt ou toute personne souhaitant gérer facilement ses stocks de produits. Il permet de suivre en temps réel les entrées et les sorties de marchandises, de maintenir une visibilité claire sur les niveaux de stock, et d’optimiser les opérations de gestion au quotidien.
+
+Développé en Python et fonctionnant actuellement dans un environnement console (interface texte), le logiciel met à disposition un menu interactif accessible à toute personne, même sans grande expérience en informatique.
+
+✅ Fonctionnalités principales
+Ajout de produits au stock
+Permet d’enregistrer rapidement un nouvel article ou d’augmenter la quantité d’un article existant dans l’inventaire.
+
+Affichage du stock actuel
+Offre une vue d’ensemble claire de tous les produits disponibles, avec leurs quantités respectives.
+
+Retrait de produits
+Possibilité de diminuer la quantité en stock lorsqu’un article est vendu, utilisé ou retiré. Si la quantité atteint zéro, le produit est automatiquement supprimé du stock.
+
+Sauvegarde automatique des données
+Toutes les opérations sont enregistrées dans un fichier JSON local, permettant la persistance des données même après la fermeture du programme.
+
+🧰 Avantages du logiciel
+Simplicité d’utilisation : Menu facile à comprendre, idéal pour les débutants.
+
+Portable : Fonctionne sur n’importe quelle machine ayant Python installé.
+
+Personnalisable : Facile à adapter selon les besoins spécifiques de l’utilisateur (ajout de catégories, alertes de seuil, etc.)
+
+Évolutif : Peut être amélioré avec une interface web, une base de données avancée, ou une connexion multi-utilisateur selon l’évolution du projet.
+
+🧱 Cas d’usage
+Suivi de stock pour une boutique ou un magasin de quartier.
+
+Gestion d’un dépôt de marchandises.
+
+Administration des entrées et sorties pour un entrepreneur individuel.
+
+Projet d'apprentissage ou prototype pour développeur débutant dans le domaine de la gestion commerciale.
+
+🔜 Évolutions prévues
+Ce projet est en constante amélioration. Les versions futures pourront intégrer :
+
+Une interface graphique (avec Flask ou Tkinter)
+
+Une base de données SQL pour une meilleure gestion des données
+
+Un système de gestion d’utilisateurs (accès sécurisé)
+
+Des exports de rapports (PDF, Excel)
+
+Un historique des mouvements de stock
+
+📌 Objectif du projet
+L’objectif principal est de fournir un outil fiable, accessible et pratique pour les gestionnaires de petites structures afin d’automatiser et simplifier la gestion de leurs stocks tout en ayant un contrôle précis de leurs marchandises.
