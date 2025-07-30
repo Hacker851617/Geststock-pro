@@ -115,7 +115,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const csvHeaders = "Date,Heure,Type,Produit,Quantité,Prix Unitaire,Prix Total,Référence,Motif\n";
       const csvRows = movements.map(m => {
         const date = new Date(m.timestamp!);
-        return `"${date.toLocaleDateString('fr-FR')}","${date.toLocaleTimeString('fr-FR')}","${m.type}","${getProductName(m.productId)}",${m.quantity},"${formatPrice(m.unitPrice)}","${formatPrice(m.totalPrice)}","${m.reference || ''}","${m.reason || ''}"`;
+        return `"${date.toLocaleDateString('fr-FR')}","${date.toLocaleTimeString('fr-FR')}","${m.movementType || m.type}","${getProductName(m.productId)}",${m.quantity},"${formatPrice(m.unitPrice)}","${formatPrice(m.totalPrice)}","${m.reference || ''}","${m.reason || ''}"`;
       }).join("\n");
       
       const csv = csvHeaders + csvRows;
@@ -161,3 +161,4 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
   return httpServer;
 }
+

@@ -17,7 +17,8 @@ export const products = pgTable("products", {
 export const stockMovements = pgTable("stock_movements", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   productId: varchar("product_id").notNull().references(() => products.id),
-  type: text("type").notNull(), // 'sale', 'purchase', 'adjustment', 'return'
+  type: text("type").notNull(), // 'add' or 'remove'
+  movementType: text("movement_type").notNull(), // 'sale', 'purchase', 'adjustment', 'return'
   quantity: integer("quantity").notNull(),
   reason: text("reason"),
   unitPrice: integer("unit_price"), // price in cents

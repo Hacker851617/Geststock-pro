@@ -46,10 +46,10 @@ export function MovementsReport() {
   }) || [];
 
   const calculateStats = () => {
-    const sales = filteredMovements.filter(m => m.type === 'sale');
-    const purchases = filteredMovements.filter(m => m.type === 'purchase');
-    const adjustments = filteredMovements.filter(m => m.type === 'adjustment');
-    const returns = filteredMovements.filter(m => m.type === 'return');
+    const sales = filteredMovements.filter(m => (m.movementType || m.type) === 'sale');
+    const purchases = filteredMovements.filter(m => (m.movementType || m.type) === 'purchase');
+    const adjustments = filteredMovements.filter(m => (m.movementType || m.type) === 'adjustment');
+    const returns = filteredMovements.filter(m => (m.movementType || m.type) === 'return');
 
     return {
       totalMovements: filteredMovements.length,
@@ -91,8 +91,8 @@ export function MovementsReport() {
       stat.totalQuantity += movement.quantity;
       stat.totalValue += movement.totalPrice || 0;
       
-      if (movement.type === 'sale') stat.sales += movement.quantity;
-      if (movement.type === 'purchase') stat.purchases += movement.quantity;
+      if ((movement.movementType || movement.type) === 'sale') stat.sales += movement.quantity;
+      if ((movement.movementType || movement.type) === 'purchase') stat.purchases += movement.quantity;
     });
 
     return Array.from(productStats.values())

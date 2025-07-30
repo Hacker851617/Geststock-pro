@@ -53,6 +53,7 @@ export function AddMovementModal({ open, onOpenChange }: AddMovementModalProps) 
       const movementData = {
         productId: data.productId,
         type: data.type === "sale" || data.type === "adjustment" ? "remove" : "add",
+        movementType: data.type,
         quantity: data.quantity,
         reason: data.reason || `${getTypeLabel(data.type)} - ${data.reference || "Sans référence"}`,
         unitPrice: data.unitPrice ? Math.round(data.unitPrice * 100) : null,

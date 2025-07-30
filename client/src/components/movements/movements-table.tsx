@@ -33,14 +33,14 @@ export function MovementsTable({ onAddMovement }: MovementsTableProps) {
     return product?.name || "Produit supprimé";
   };
 
-  const getTypeInfo = (type: string) => {
+  const getTypeInfo = (movementType: string) => {
     const types = {
       sale: { label: "Vente", icon: TrendingDown, color: "text-red-600 bg-red-100" },
       purchase: { label: "Achat", icon: TrendingUp, color: "text-green-600 bg-green-100" },
       adjustment: { label: "Ajustement", icon: RefreshCw, color: "text-blue-600 bg-blue-100" },
       return: { label: "Retour", icon: ArrowLeft, color: "text-orange-600 bg-orange-100" },
     };
-    return types[type as keyof typeof types] || { label: type, icon: RefreshCw, color: "text-gray-600 bg-gray-100" };
+    return types[movementType as keyof typeof types] || { label: movementType, icon: RefreshCw, color: "text-gray-600 bg-gray-100" };
   };
 
   const formatPrice = (price: number | null) => {
@@ -81,7 +81,7 @@ export function MovementsTable({ onAddMovement }: MovementsTableProps) {
     const productName = getProductName(movement.productId);
     const matchesSearch = productName.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          (movement.reference && movement.reference.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesType = !typeFilter || typeFilter === "all" || movement.type === typeFilter;
+    const matchesType = !typeFilter || typeFilter === "all" || movement.movementType === typeFilter;
     const matchesDate = !dateFilter || new Date(movement.timestamp!).toDateString() === new Date(dateFilter).toDateString();
     
     return matchesSearch && matchesType && matchesDate;
@@ -198,7 +198,7 @@ export function MovementsTable({ onAddMovement }: MovementsTableProps) {
               </TableRow>
             ) : (
               filteredMovements.map((movement) => {
-                const typeInfo = getTypeInfo(movement.type);
+                const typeInfo = getTypeInfo(movement.movementType || movement.type);
                 const Icon = typeInfo.icon;
                 return (
                   <TableRow key={movement.id} className="hover:bg-slate-50">
@@ -227,7 +227,7 @@ export function MovementsTable({ onAddMovement }: MovementsTableProps) {
                       </div>
                     </TableCell>
                     <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
-                      {movement.type === 'sale' || movement.type === 'adjustment' ? '-' : '+'}{movement.quantity}
+                      {movement.type === 'remove' ? '-' : '+'}{movement.quantity}
                     </TableCell>
                     <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
                       {formatPrice(movement.totalPrice)}

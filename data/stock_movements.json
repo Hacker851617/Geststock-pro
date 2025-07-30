@@ -6,5 +6,16 @@
     "reason": "vente",
     "id": "1b3d2ce7-9798-4b42-a6e4-fb8be16967f3",
     "timestamp": "2025-07-30T14:33:50.882Z"
+  },
+  {
+    "productId": "ee15bfce-2d7d-4bd0-b2ef-4e6fbddc5523",
+    "type": "add",
+    "quantity": 50,
+    "reason": "vente",
+    "id": "a6208fe8-139a-4b63-a93c-4fb86046d287",
+    "timestamp": "2025-07-30T15:11:33.737Z",
+    "unitPrice": null,
+    "totalPrice": null,
+    "reference": null
   }
 ]
