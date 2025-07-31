@@ -236,6 +236,21 @@ app.get('/', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ GestStock Pro API running on http://localhost:${PORT}`);
-});
+import { createServer } from "http";
+import { setupVite, serveStatic } from "./vite"; // ataovy izay hahita an'i vite.ts
+
+const server = createServer(app);
+
+(async () => {
+  if (process.env.NODE_ENV !== "production") {
+    await setupVite(app, server);
+  } else {
+    serveStatic(app);
+  }
+
+    const PORT = process.env.PORT ? parseInt(process.env.PORT) : 5001;
+    ;
+  server.listen(PORT, () => {
+    console.log(`✅ GestStock Pro API + UI running at http://localhost:${PORT}`);
+  });
+})();

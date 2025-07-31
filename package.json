@@ -1,6 +1,9 @@
 {
+  "type": "module",
   "scripts": {
-    "dev": "node server/index.ts"
+    "dev": "tsx server/index.ts",
+    "build": "vite build",
+    "start": "node dist/server/index.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -9,6 +12,7 @@
     "@types/node": "^24.1.0",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^4.7.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.44.4",
@@ -23,5 +27,8 @@
     "vite": "^7.0.6",
     "wouter": "^3.7.1",
     "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@replit/vite-plugin-runtime-error-modal": "^0.0.3"
   }
 }
