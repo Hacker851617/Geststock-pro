@@ -83,3 +83,30 @@ export function serveStatic(app: Express) {
     res.sendFile(path.resolve(distPath, "index.html"));
   });
 }
+import { ViteDevServer } from "vite";
+import { Express } from "express";
+import { createServer as createViteServer } from "vite";
+import { Server } from "http";
+import path from "path";
+
+export async function setupVite(app: Express, server: Server) {
+  const vite = await createViteServer({
+    server: { middlewareMode: true },
+    appType: "spa",
+    root: path.resolve("client"),
+  });
+
+  app.use(vite.ssrFixStacktrace);
+  app.use(vite.middlewares);
+}
+
+export function serveStatic(app: Express) {
+  const path = require("path");
+  const express = require("express");
+  
+  app.use(express.static(path.join(process.cwd(), "dist/public")));
+  
+  app.get("*", (req: any, res: any) => {
+    res.sendFile(path.join(process.cwd(), "dist/public/index.html"));
+  });
+}
