@@ -4,6 +4,7 @@ hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 
 [nix]
 channel = "stable-24_05"
+packages = ["lsof"]
 
 [deployment]
 deploymentTarget = "autoscale"
@@ -41,3 +42,6 @@ author = "agent"
 task = "shell.exec"
 args = "npm run dev"
 waitForPort = 5001
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "lsof -i :5001"

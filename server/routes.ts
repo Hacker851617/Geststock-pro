@@ -1,11 +1,9 @@
 import type { Express } from "express";
-import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertProductSchema, insertStockMovementSchema } from "@shared/schema";
 import { z } from "zod";
 
-export async function registerRoutes(app: Express): Promise<Server> {
-  // Get all products
+export async function registerRoutes(app: Express): Promise<void> {
   app.get("/api/products", async (req, res) => {
     try {
       const products = await storage.getProducts();
@@ -15,20 +13,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get single product
   app.get("/api/products/:id", async (req, res) => {
     try {
       const product = await storage.getProduct(req.params.id);
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
+      if (!product) return res.status(404).json({ message: "Product not found" });
       res.json(product);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch product" });
     }
   });
 
-  // Create product
   app.post("/api/products", async (req, res) => {
     try {
       const validatedData = insertProductSchema.parse(req.body);
@@ -42,14 +36,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update product
   app.patch("/api/products/:id", async (req, res) => {
     try {
       const updates = insertProductSchema.partial().parse(req.body);
       const product = await storage.updateProduct(req.params.id, updates);
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
+      if (!product) return res.status(404).json({ message: "Product not found" });
       res.json(product);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -59,20 +50,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Delete product
   app.delete("/api/products/:id", async (req, res) => {
     try {
       const deleted = await storage.deleteProduct(req.params.id);
-      if (!deleted) {
-        return res.status(404).json({ message: "Product not found" });
-      }
+      if (!deleted) return res.status(404).json({ message: "Product not found" });
       res.status(204).send();
     } catch (error) {
       res.status(500).json({ message: "Failed to delete product" });
     }
   });
 
-  // Stock movements
   app.get("/api/stock-movements", async (req, res) => {
     try {
       const movements = await storage.getStockMovements();
@@ -82,7 +69,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Create stock movement
   app.post("/api/stock-movements", async (req, res) => {
     try {
       const validatedData = insertStockMovementSchema.parse(req.body);
@@ -96,39 +82,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Export movements to CSV
   app.get("/api/export/movements-csv", async (req, res) => {
     try {
       const movements = await storage.getStockMovements();
       const products = await storage.getProducts();
-      
+
       const getProductName = (productId: string) => {
         const product = products.find(p => p.id === productId);
         return product?.name || "Produit supprimé";
       };
 
-      const formatPrice = (price: number | null) => {
-        if (!price) return "0.00";
-        return (price / 100).toFixed(2);
-      };
-      
+      const formatPrice = (price: number | null) =>
+        price ? (price / 100).toFixed(2) : "0.00";
+
       const csvHeaders = "Date,Heure,Type,Produit,Quantité,Prix Unitaire,Prix Total,Référence,Motif\n";
       const csvRows = movements.map(m => {
         const date = new Date(m.timestamp!);
         return `"${date.toLocaleDateString('fr-FR')}","${date.toLocaleTimeString('fr-FR')}","${m.type}","${getProductName(m.productId)}",${m.quantity},"${formatPrice(m.unitPrice)}","${formatPrice(m.totalPrice)}","${m.reference || ''}","${m.reason || ''}"`;
       }).join("\n");
-      
+
       const csv = csvHeaders + csvRows;
-      
-      res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', 'attachment; filename="mouvements_stock.csv"');
+
+      res.setHeader("Content-Type", "text/csv");
+      res.setHeader("Content-Disposition", 'attachment; filename="mouvements_stock.csv"');
       res.send(csv);
     } catch (error) {
       res.status(500).json({ message: "Failed to export movements CSV" });
     }
   });
 
-  // Get dashboard stats
   app.get("/api/stats", async (req, res) => {
     try {
       const stats = await storage.getStats();
@@ -138,27 +120,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Export products to CSV
   app.get("/api/export/csv", async (req, res) => {
     try {
       const products = await storage.getProducts();
-      
+
       const csvHeaders = "Name,SKU,Category,Quantity,Min Stock,Description,Last Modified\n";
-      const csvRows = products.map(p => 
+      const csvRows = products.map(p =>
         `"${p.name}","${p.sku || ''}","${p.category}",${p.quantity},${p.minStock || 5},"${p.description || ''}","${p.lastModified}"`
       ).join("\n");
-      
+
       const csv = csvHeaders + csvRows;
-      
-      res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', 'attachment; filename="products.csv"');
+
+      res.setHeader("Content-Type", "text/csv");
+      res.setHeader("Content-Disposition", 'attachment; filename="products.csv"');
       res.send(csv);
     } catch (error) {
       res.status(500).json({ message: "Failed to export CSV" });
     }
   });
-
-  const httpServer = createServer(app);
-  return httpServer;
 }
-
